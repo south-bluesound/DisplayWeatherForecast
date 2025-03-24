@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天気予報</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>天気予報</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>日付</th>
+                <th>気温 (°C)</th>
+                <th>気温 (°F)</th>
+                <th>概要</th>
+            </tr>
+        </thead>
+        <tbody id="weatherData">
+        </tbody>
+    </table>
+    <p id="errorMessage" style="color: red;"></p>
+
+    <script>
+        async function fetchWeather() {
+            try {
+                const response = await fetch('https://localhost:7004/WeatherForecast');
+                if (!response.ok) {
+                    throw new Error(`HTTPエラー! ステータス: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                const tableBody = document.getElementById('weatherData');
+                tableBody.innerHTML = '';
+
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.date}</td>
+                        <td>${item.temperatureC}</td>
+                        <td>${item.temperatureF}</td>
+                        <td>${item.summary}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                document.getElementById('errorMessage').textContent = `データ取得に失敗しました: ${error.message}`;
+            }
+        }
+        
+        fetchWeather();
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+WeatherForecastAPI/bin/
+WeatherForecastAPI/obj/
+WeatherForecastAPI/.vs/
+
+*.csproj
+*.csproj.user
+*.sln
